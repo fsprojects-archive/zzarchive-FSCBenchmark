@@ -43,7 +43,16 @@ type SprintfBenchmark () =
         for i in 1 .. n do
             sprintf "%s" "hello world"
             |> ignore
+            ()
+
+    [<Benchmark; MemoryDiagnoser>]
+    member __.SimpleObject () =
+        let x = [| 1; 2 ; 3|]
+        for i in 1 .. n do
+            sprintf "%A" x
+            |> ignore
             ()            
+
 
     [<Benchmark; MemoryDiagnoser>]
     member __.Parallel () =
