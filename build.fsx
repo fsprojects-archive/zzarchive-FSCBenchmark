@@ -135,7 +135,7 @@ Target "RunPRBenchmark" (fun _ ->
 #load "analysis/Analysis.fsx"
 
 Target "RunAnalysis" (fun _ ->
-    Analysis.createDiagram()
+    Analysis.createRuntimeDiagram()
 )
 
 // --------------------------------------------------------------------------------------

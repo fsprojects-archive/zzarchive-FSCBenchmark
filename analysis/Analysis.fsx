@@ -1,10 +1,6 @@
 #load "../.paket/load/net45/Analysis/FSharp.Data.fsx"
-#I "../packages/analysis/XPlot.GoogleCharts/lib/net45"
-#I "../packages/analysis/XPlot.GoogleCharts.WPF/lib/net45"
-#I "../packages/analysis/Google.DataTable.Net.Wrapper/lib"
-#r "Google.DataTable.Net.Wrapper.dll"
-#r "XPlot.GoogleCharts.dll"
-#r "XPlot.GoogleCharts.WPF.dll"
+#load "../.paket/load/net45/Analysis/XPlot.GoogleCharts.fsx"
+
 open XPlot.GoogleCharts
 
 open System.IO
@@ -20,27 +16,25 @@ let loadResults (fileName:string) =
 let baseLineFile = __SOURCE_DIRECTORY__ + "/../results/baseline/SprintfBenchmark-report.csv"
 let prFile = __SOURCE_DIRECTORY__ + "/../results/pr/SprintfBenchmark-report.csv"
 
-let createDiagram() =
+let createRuntimeDiagram() =
     let baseLine = loadResults baseLineFile
     let pr = loadResults prFile
 
     let baseLineData =
         baseLine.Rows
-        |> Seq.map (fun r -> sprintf "%s %d" r.Method r.N, r.Mean)
+        |> Seq.zip pr.Rows
+        |> Seq.map (fun (b,r) -> sprintf "%s %d" b.Method b.N, b.Mean / r.Mean * 100.)
         |> Seq.toList
+        |> List.sortBy fst
 
-    let prData =
-        pr.Rows
-        |> Seq.map (fun r -> sprintf "%s %d" r.Method r.N, r.Mean)
-        |> Seq.toList
 
     let options =
-        Options(
-            title = "Sprintf Performance"
-        )
+        Options(title = "Sprintf Performance in %" )
   
-    [baseLineData; prData]
+    [baseLineData]
     |> Chart.Column
     |> Chart.WithOptions options
-    |> Chart.WithLabels ["BaseLine"; "PR" ]
+    |> Chart.WithLabels ["BaseLine / PR * 100%" ]
     |> Chart.Show
+
+createRuntimeDiagram()
