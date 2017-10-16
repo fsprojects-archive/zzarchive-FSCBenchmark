@@ -7,7 +7,7 @@ open BenchmarkDotNet.Running
 type SprintfBenchmark () =
     let mutable n : int = 0
     
-    [<Params (100, 500, 1000, 2000)>] 
+    [<Params (1, 10, 100, 500, 1000, 2000)>] 
     member val public N = 0 with get, set
 
     [<GlobalSetup>]
@@ -51,7 +51,23 @@ type SprintfBenchmark () =
         for i in 1 .. n do
             sprintf "%A" x
             |> ignore
-            ()            
+            ()
+
+
+    [<Benchmark; MemoryDiagnoser>]
+    member __.Double () =
+        for i in 1 .. n do
+            sprintf "Hello %s" "world"
+            |> ignore
+            ()
+
+    [<Benchmark; MemoryDiagnoser>]
+    member __.DoubleObject () =
+        let x = [| 1; 2 ; 3|]
+        for i in 1 .. n do
+            sprintf "Hello %A" x
+            |> ignore
+            ()                     
 
 
     [<Benchmark; MemoryDiagnoser>]
