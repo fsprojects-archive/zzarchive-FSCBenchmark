@@ -9,14 +9,14 @@ open FSharp.Data
 
 let [<Literal>]ResultsFile = __SOURCE_DIRECTORY__ + "/SprintfBenchmark-report.csv"
 type Results = CsvProvider<ResultsFile, ";", InferRows = 0, Quote='"' >
+
 let loadResults (fileName:string) = 
     let s = File.ReadAllText(fileName).Replace("\"","").Replace(" us","").Replace(" ns","")
     Results.Parse s
-
-let baseLineFile = __SOURCE_DIRECTORY__ + "/../results/baseline/SprintfBenchmark-report.csv"
-let prFile = __SOURCE_DIRECTORY__ + "/../results/pr/SprintfBenchmark-report.csv"
-
 let createRuntimeDiagram() =
+    let baseLineFile = __SOURCE_DIRECTORY__ + "/../results/baseline/SprintfBenchmark-report.csv"
+    let prFile = __SOURCE_DIRECTORY__ + "/../results/pr/SprintfBenchmark-report.csv"
+
     let baseLine = loadResults baseLineFile
     let pr = loadResults prFile
 
@@ -37,4 +37,4 @@ let createRuntimeDiagram() =
     |> Chart.WithLabels ["PR / BaseLine * 100%" ]
     |> Chart.Show
 
-// createRuntimeDiagram()
+createRuntimeDiagram()
