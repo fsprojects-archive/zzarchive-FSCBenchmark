@@ -10,7 +10,7 @@ open FSharp.Data
 let [<Literal>]ResultsFile = __SOURCE_DIRECTORY__ + "/SprintfBenchmark-report.csv"
 type Results = CsvProvider<ResultsFile, ";", InferRows = 0, Quote='"' >
 let loadResults (fileName:string) = 
-    let s = File.ReadAllText(fileName).Replace("\"","").Replace(" us","")
+    let s = File.ReadAllText(fileName).Replace("\"","").Replace(" us","").Replace(" ns","")
     Results.Parse s
 
 let baseLineFile = __SOURCE_DIRECTORY__ + "/../results/baseline/SprintfBenchmark-report.csv"
