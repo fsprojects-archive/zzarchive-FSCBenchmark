@@ -37,4 +37,4 @@ let createRuntimeDiagram() =
     |> Chart.WithLabels ["PR / BaseLine * 100%" ]
     |> Chart.Show
 
-createRuntimeDiagram()
+//createRuntimeDiagram()
